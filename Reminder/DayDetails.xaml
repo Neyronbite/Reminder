@@ -23,8 +23,17 @@
         <TextBox TextWrapping="Wrap" Text="Title" x:Name="TitleTextBlox" VerticalAlignment="Center" Margin="10,0,10,0" Grid.Column="1"/>
         <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Title Of Day" VerticalAlignment="Top" Margin="0,41,0,0" Grid.Column="1"/>
         <TextBlock HorizontalAlignment="Center" Margin="0,118,0,0" TextWrapping="Wrap" Text="Your Notes For Day" VerticalAlignment="Top"/>
-        <DataGrid Grid.Column="2" Grid.Row="1" d:ItemsSource="{d:SampleData ItemCount=5}" Grid.ColumnSpan="2" Grid.RowSpan="3"/>
+        <ListView Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="3" x:Name="EventsListView" >
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Title}" />
+                    <GridViewColumn Header="Time" DisplayMemberBinding="{Binding TriggerTime}" />
+                    <GridViewColumn Header="Enabled" DisplayMemberBinding="{Binding IsEnabled}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
         <TextBlock Grid.Column="2" HorizontalAlignment="Center" TextWrapping="Wrap" Text="March 11 2025" VerticalAlignment="Center" FontSize="24" x:Name="DateTextBlock"/>
-        <Button Grid.Column="3" Content="Apply" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" Background="LawnGreen" Foreground="White" Click="Button_Click"/>
+        <Button Grid.Column="3" Content="Apply" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="24" Background="LawnGreen" Foreground="White" Click="Button_Click_Apply" Height="69" Width="120" Margin="0,5,0,0"/>
+        <Button Grid.Column="3" Content="Add Reminder" HorizontalAlignment="Center" Margin="0,103,0,0" VerticalAlignment="Top" Click="Button_Click_Add_Reminder"/>
     </Grid>
 </Window>

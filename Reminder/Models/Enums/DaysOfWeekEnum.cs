@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Reminder.Models
+namespace Reminder.Models.Enums
 {
     public enum DaysOfWeekEnum
     {

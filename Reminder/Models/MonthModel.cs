@@ -3,23 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Reminder.Models.Enums;
 
 namespace Reminder.Models
 {
     /// <summary>
     /// Month model presents full month data, that will be presentet on grids, with day events etc
     /// </summary>
-    public class CalendarMonthModel
+    public class MonthModel
     {
         public string Title { get; set; }
 
-        public Dictionary<int, CalendarDayModel> DaysDict { get; set; }
+        public Dictionary<int, DayModel> DaysDict { get; set; }
         public DaysOfWeekEnum StartDayOfWeek { get; set; }
         public int DaysCount { get; set; }
 
-        public CalendarMonthModel()
+        public MonthModel()
         {
-            DaysDict = new Dictionary<int, CalendarDayModel>();
+            DaysDict = new Dictionary<int, DayModel>();
         }
     }
 }

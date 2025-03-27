@@ -1,4 +1,4 @@
-﻿using Reminder.Models;
+﻿using Reminder.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

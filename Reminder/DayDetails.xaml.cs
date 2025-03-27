@@ -1,4 +1,5 @@
 ﻿using Reminder.Models;
+using Reminder.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,10 +21,12 @@ namespace Reminder
     /// </summary>
     public partial class DayDetails : Window
     {
-        CalendarDayModel model;
-        Action<CalendarDayModel> applyCallback;
+        // Current day model
+        DayModel model;
+        // Callback, to change UI
+        Action<DayModel> applyCallback;
 
-        public DayDetails(CalendarDayModel dayModel, Action<CalendarDayModel> applyCallback)
+        public DayDetails(DayModel dayModel, Action<DayModel> applyCallback)
         {
             InitializeComponent();
 
@@ -32,11 +35,25 @@ namespace Reminder
 
             TitleTextBlox.Text = dayModel.Title;
             NotesTextBlox.Text = dayModel.Notes;
-            DateTextBlock.Text = "TODO Month/Day/Year";
+            DateTextBlock.Text = $"{dayModel.Day} {(MonthsEnum)dayModel.Month} {dayModel.Year}";
+
+            if (model.Events == null)
+            {
+                model.Events = new List<EventModel>();
+            }
+            else
+            {
+                foreach (var item in model.Events)
+                {
+                    //TODO change this later
+                    //EventsGrid.Items.Add(item);
+                    EventsListView.Items.Add(item);
+                }
+            }
             //TODO add alarm data
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Button_Click_Apply(object sender, RoutedEventArgs e)
         {
             model.Title = TitleTextBlox.Text;
             model.Notes = NotesTextBlox.Text;
@@ -46,6 +63,26 @@ namespace Reminder
 
             applyCallback(model);
             this.Close();
+        }
+
+        private void Button_Click_Add_Reminder(object sender, RoutedEventArgs e)
+        {
+            var ef = new EventForm(em => 
+            {
+                var newEv = new EventModel
+                {
+                    Title = em.Title,
+                    TriggerTime = new DateTime(model.Year, model.Month, model.Day)
+                };
+                newEv.TriggerTime.AddHours(em.TriggerTime.Hour);
+                newEv.TriggerTime.AddMinutes(em.TriggerTime.Minute);
+
+                model.Events.Add(newEv);
+                //TODO change this later
+                //EventsGrid.Children.Add(new TextBlock() { Text = $"{newEv.Title}: {newEv.TriggerTime}" });
+                EventsListView.Items.Add(newEv);
+            }); 
+            ef.ShowDialog();
         }
     }
 }
