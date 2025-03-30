@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="EventForm" Height="400" Width="300">
     <Grid>
-        <Button Content="Apply" HorizontalAlignment="Center" Margin="0,341,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+        <Button Content="Apply" HorizontalAlignment="Center" Margin="0,300,0,0" VerticalAlignment="Top" Click="Button_Click"/>
 
         <materialDesign:NumericUpDown HorizontalAlignment="Left" Margin="40,222,0,0" VerticalAlignment="Top" x:Name="HourPicker"/>
         <materialDesign:NumericUpDown HorizontalAlignment="Left" Margin="175,222,0,0" VerticalAlignment="Top" x:Name="MinutePicker"/>
@@ -16,6 +16,7 @@
         <TextBlock HorizontalAlignment="Left" Margin="194,191,0,0" TextWrapping="Wrap" Text="Minute" VerticalAlignment="Top" FontSize="20"/>
         <TextBox HorizontalAlignment="Center" Margin="0,131,0,0" TextWrapping="Wrap" Text="Title" VerticalAlignment="Top" Width="120" x:Name="TitleTextBox" />
         <TextBlock HorizontalAlignment="Center" Margin="0,97,0,0" TextWrapping="Wrap" Text="Title" VerticalAlignment="Top" FontSize="20"/>
+        <DatePicker HorizontalAlignment="Center" Margin="0,31,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

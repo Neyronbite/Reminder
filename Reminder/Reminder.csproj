@@ -16,12 +16,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
     <PackageReference Include="MaterialDesignThemes" Version="5.2.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Data\Data.csproj" />
+    <ProjectReference Include="..\Notifications\Notifications.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="notification.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

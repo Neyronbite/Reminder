@@ -176,6 +176,16 @@ namespace Reminder
                 .ToDictionaryAsync(d => d.Day);
             monthModel.DaysDict = dayModels;
 
+            foreach (var item in monthModel.DaysDict)
+            {
+                item.Value.Events = await db.Events
+                    .Where(e => e.DayId == item.Value.Id && e.IsDeleted != true)
+                    .Select(e => e.ToModel())
+                    .ToListAsync();
+            }
+
+            await db.DisposeAsync();
+
             if (DateTime.Now.Year == year && DateTime.Now.Month == month && !monthModel.DaysDict.ContainsKey(DateTime.Today.Day))
             {
                 var today = new DayModel()
@@ -235,8 +245,6 @@ namespace Reminder
                     }
                     currentBtn!.Content = $"{day}\n{cdm.Title}";
                     currentBtn.Background = CalendarButton.SpecialBackgroundBrush;
-
-                    //TODO update db
                 });
             wnd.ShowDialog();
         }

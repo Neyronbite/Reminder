@@ -33,6 +33,7 @@ namespace Reminder
             var em = new EventModel();
             em.Title = TitleTextBox.Text;
             em.TriggerTime = DateTime.Today;
+            //TODO fix this shit
             em.TriggerTime.AddMinutes(MinutePicker.Value);
             em.TriggerTime.AddHours(HourPicker.Value);
 

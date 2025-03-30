@@ -14,6 +14,7 @@ namespace Reminder.Utils
         {
             var dayModel = new DayModel()
             {
+                Id = day.Id,
                 Title = day.Title,
                 Notes = day.Notes,
                 Year = day.Year,
@@ -29,6 +30,7 @@ namespace Reminder.Utils
         {
             var day = new Day()
             {
+                Id = dayModel.Id,
                 Title = dayModel.Title,
                 Notes = dayModel.Notes,
                 Year = dayModel.Year,
@@ -44,6 +46,7 @@ namespace Reminder.Utils
         {
             var eventModel = new EventModel()
             {
+                Id = @event.Id,
                 Title = @event.Title,
                 IsEnabled = @event.IsEnabled,
                 Triggered = @event.Triggered,
@@ -58,6 +61,7 @@ namespace Reminder.Utils
         {
             var @event = new Event()
             {
+                Id = eventModel.Id,
                 DayId = dayId,
                 Title = eventModel.Title,
                 IsEnabled = eventModel.IsEnabled,

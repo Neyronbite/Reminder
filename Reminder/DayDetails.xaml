@@ -19,7 +19,7 @@
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <TextBox Grid.Row="1" TextWrapping="Wrap" Text="Your Notes" Grid.ColumnSpan="2" Grid.RowSpan="3" x:Name="NotesTextBlox"/>
+        <TextBox Grid.Row="1" TextWrapping="Wrap" Text="Your Notes" Grid.ColumnSpan="2" Grid.RowSpan="3" x:Name="NotesTextBlox" VerticalContentAlignment="Top" TextAlignment="Center"/>
         <TextBox TextWrapping="Wrap" Text="Title" x:Name="TitleTextBlox" VerticalAlignment="Center" Margin="10,0,10,0" Grid.Column="1"/>
         <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Title Of Day" VerticalAlignment="Top" Margin="0,41,0,0" Grid.Column="1"/>
         <TextBlock HorizontalAlignment="Center" Margin="0,118,0,0" TextWrapping="Wrap" Text="Your Notes For Day" VerticalAlignment="Top"/>

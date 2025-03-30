@@ -1,5 +1,8 @@
-﻿using Reminder.Models;
+﻿using Data;
+using Microsoft.EntityFrameworkCore;
+using Reminder.Models;
 using Reminder.Models.Enums;
+using Reminder.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,16 +53,61 @@ namespace Reminder
                     EventsListView.Items.Add(item);
                 }
             }
-            //TODO add alarm data
         }
 
-        private void Button_Click_Apply(object sender, RoutedEventArgs e)
+        private async void Button_Click_Apply(object sender, RoutedEventArgs e)
         {
             model.Title = TitleTextBlox.Text;
             model.Notes = NotesTextBlox.Text;
-            //model.Alarms = TODO
 
-            //TODO save to db
+            var db = new Context();
+            var dayEntity = await db.Days.Where(d => d.Id == model.Id).FirstOrDefaultAsync();
+
+            if (dayEntity != null)
+            {
+                dayEntity.Title = TitleTextBlox.Text;
+                dayEntity.Notes = NotesTextBlox.Text;
+                await db.SaveChangesAsync();
+
+                foreach (var ev in model.Events)
+                {
+                    var evEntity = await db.Events.Where(e => e.Id == ev.Id).FirstOrDefaultAsync();
+                    if (evEntity != null)
+                    {
+                        evEntity.Title = ev.Title;
+                        evEntity.IsEnabled = ev.IsEnabled;
+                        evEntity.Triggered = ev.Triggered;
+                        evEntity.Canceled = ev.Canceled;
+                        evEntity.TriggerTime = ev.TriggerTime;
+                        await db.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        evEntity = ev.ToEntity(dayEntity.Id);
+                        await db.Events.AddAsync(evEntity);
+                        await db.SaveChangesAsync();
+                    }
+                }
+            }
+            else
+            {
+                dayEntity = model.ToEntity();
+                await db.Days.AddAsync(dayEntity);
+                await db.SaveChangesAsync();
+
+                dayEntity.Events = model.Events.ToEntity(dayEntity.Id);
+
+                foreach (var ev in dayEntity.Events)
+                {
+                    await db.Events.AddAsync(ev);
+                }
+
+                db.SaveChanges();
+            }
+
+            await db.DisposeAsync();
+
+            model.Id = dayEntity.Id;
 
             applyCallback(model);
             this.Close();
