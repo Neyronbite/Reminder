@@ -49,20 +49,18 @@ namespace Reminder
             GlobalTimer.Start();
         }
 
-        private void GlobalTimer_Elapsed(object? sender, ElapsedEventArgs e)
+        private async void GlobalTimer_Elapsed(object? sender, ElapsedEventArgs e)
         {
 
             // TODO on day change, update calendar
             // TODO check todays events
-            NotificationService.SendCustomNotification();
+            await NotificationService.HandelEventNotifications();
         }
 
-        // Implementing tray icon logic
-        // copied from https://possemeeg.wordpress.com/2007/09/06/minimize-to-tray-icon-in-wpf/
         void OnClose(object sender, CancelEventArgs args)
         {
             NotificationService.OnCloseTriggered();
-            //args.Cancel = true;
+            args.Cancel = true;
         }
 
     }

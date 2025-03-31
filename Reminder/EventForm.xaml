@@ -6,17 +6,13 @@
         xmlns:local="clr-namespace:Reminder"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" x:Class="Reminder.EventForm"
         mc:Ignorable="d"
-        Title="EventForm" Height="400" Width="300">
+        Title="" Height="315" Width="187.5" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" >
     <Grid>
-        <Button Content="Apply" HorizontalAlignment="Center" Margin="0,300,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+        <Button Content="Apply" HorizontalAlignment="Center" VerticalAlignment="Top" Click="Button_Click_Apply" FontSize="24" Height="40" Margin="0,192,0,0"/>
 
-        <materialDesign:NumericUpDown HorizontalAlignment="Left" Margin="40,222,0,0" VerticalAlignment="Top" x:Name="HourPicker"/>
-        <materialDesign:NumericUpDown HorizontalAlignment="Left" Margin="175,222,0,0" VerticalAlignment="Top" x:Name="MinutePicker"/>
-        <TextBlock HorizontalAlignment="Left" Margin="68,191,0,0" TextWrapping="Wrap" Text="Hour" VerticalAlignment="Top" FontSize="20"/>
-        <TextBlock HorizontalAlignment="Left" Margin="194,191,0,0" TextWrapping="Wrap" Text="Minute" VerticalAlignment="Top" FontSize="20"/>
-        <TextBox HorizontalAlignment="Center" Margin="0,131,0,0" TextWrapping="Wrap" Text="Title" VerticalAlignment="Top" Width="120" x:Name="TitleTextBox" />
-        <TextBlock HorizontalAlignment="Center" Margin="0,97,0,0" TextWrapping="Wrap" Text="Title" VerticalAlignment="Top" FontSize="20"/>
-        <DatePicker HorizontalAlignment="Center" Margin="0,31,0,0" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Center" Margin="0,72,0,0" TextWrapping="Wrap" Text="Title" VerticalAlignment="Top" x:Name="TitleTextBox" FontSize="24" Width="167" />
+        <TextBlock HorizontalAlignment="Center" Margin="0,22,0,0" TextWrapping="Wrap" Text="Title" VerticalAlignment="Top" FontSize="32"/>
+        <materialDesign:TimePicker HorizontalAlignment="Center" VerticalAlignment="Center" SelectedTime="12:00 AM" FontSize="24" x:Name="TimePicker"/>
 
     </Grid>
 </Window>

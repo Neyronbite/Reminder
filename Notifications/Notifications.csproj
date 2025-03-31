@@ -12,4 +12,8 @@
     <PackageReference Include="Notification.Wpf" Version="8.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Data\Data.csproj" />
+  </ItemGroup>
+
 </Project>

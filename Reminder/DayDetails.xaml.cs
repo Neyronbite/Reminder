@@ -1,4 +1,5 @@
 ﻿using Data;
+using MaterialDesignThemes.Wpf;
 using Microsoft.EntityFrameworkCore;
 using Reminder.Models;
 using Reminder.Models.Enums;
@@ -60,6 +61,9 @@ namespace Reminder
             model.Title = TitleTextBlox.Text;
             model.Notes = NotesTextBlox.Text;
 
+            // Okay, this is real grdon,
+            // but it is what it is
+            // Saving day data to db
             var db = new Context();
             var dayEntity = await db.Days.Where(d => d.Id == model.Id).FirstOrDefaultAsync();
 
@@ -76,7 +80,6 @@ namespace Reminder
                     {
                         evEntity.Title = ev.Title;
                         evEntity.IsEnabled = ev.IsEnabled;
-                        evEntity.Triggered = ev.Triggered;
                         evEntity.Canceled = ev.Canceled;
                         evEntity.TriggerTime = ev.TriggerTime;
                         await db.SaveChangesAsync();
@@ -87,6 +90,7 @@ namespace Reminder
                         await db.Events.AddAsync(evEntity);
                         await db.SaveChangesAsync();
                     }
+                    ev.Id = evEntity.Id;
                 }
             }
             else
@@ -95,20 +99,24 @@ namespace Reminder
                 await db.Days.AddAsync(dayEntity);
                 await db.SaveChangesAsync();
 
-                dayEntity.Events = model.Events.ToEntity(dayEntity.Id);
+                dayEntity.Events = new List<Data.Entities.Event>();
 
-                foreach (var ev in dayEntity.Events)
+                foreach (var ev in model.Events)
                 {
-                    await db.Events.AddAsync(ev);
-                }
+                    var evEntity = ev.ToEntity(dayEntity.Id);
+                    await db.Events.AddAsync(evEntity);
+                    await db.SaveChangesAsync();
 
-                db.SaveChanges();
+                    ev.Id = evEntity.Id;
+                    dayEntity.Events.Add(evEntity);
+                }
             }
 
             await db.DisposeAsync();
 
             model.Id = dayEntity.Id;
 
+            // Calling UI callback
             applyCallback(model);
             this.Close();
         }
@@ -120,10 +128,13 @@ namespace Reminder
                 var newEv = new EventModel
                 {
                     Title = em.Title,
-                    TriggerTime = new DateTime(model.Year, model.Month, model.Day)
+                    TriggerTime = new DateTime(model.Year, model.Month, model.Day),
+                    IsEnabled = true,
+                    Triggered = false,
                 };
-                newEv.TriggerTime.AddHours(em.TriggerTime.Hour);
-                newEv.TriggerTime.AddMinutes(em.TriggerTime.Minute);
+                newEv.TriggerTime = newEv.TriggerTime
+                    .AddHours(em.TriggerTime.Hour)
+                    .AddMinutes(em.TriggerTime.Minute);
 
                 model.Events.Add(newEv);
                 //TODO change this later
@@ -132,5 +143,8 @@ namespace Reminder
             }); 
             ef.ShowDialog();
         }
+        // TODO Better UI
+        // TODO Better event management: delete, enable/disable, change time ...
+        // TODO Notes input does not support shift+enter
     }
 }

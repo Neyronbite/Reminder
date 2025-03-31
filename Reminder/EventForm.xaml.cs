@@ -28,16 +28,20 @@ namespace Reminder
             this.callback = callback;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Button_Click_Apply(object sender, RoutedEventArgs e)
         {
             var em = new EventModel();
             em.Title = TitleTextBox.Text;
             em.TriggerTime = DateTime.Today;
             //TODO fix this shit
-            em.TriggerTime.AddMinutes(MinutePicker.Value);
-            em.TriggerTime.AddHours(HourPicker.Value);
+            em.TriggerTime = (DateTime)TimePicker.SelectedTime;
 
             callback(em);
+            this.Close();
+        }
+
+        private void Button_Click_Cancel(object sender, RoutedEventArgs e)
+        {
             this.Close();
         }
     }

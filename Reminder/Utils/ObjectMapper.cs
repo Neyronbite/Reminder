@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 
 namespace Reminder.Utils
 {
+    /// <summary>
+    /// Just mapping
+    /// </summary>
+    /// It looks like grdon, but hey, it's simple and does not require any other libs
     public static class ObjectMapper
     {
         public static DayModel ToModel(this Day day)
