@@ -36,7 +36,7 @@ namespace Reminder
             //TODO fix this shit
             em.TriggerTime = (DateTime)TimePicker.SelectedTime;
 
-            callback(em);
+            callback(em);   
             this.Close();
         }
 

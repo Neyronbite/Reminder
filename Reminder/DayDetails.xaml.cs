@@ -125,6 +125,8 @@ namespace Reminder
         {
             var ef = new EventForm(em => 
             {
+                var dt = new DateTime(model.Year, model.Month, model.Day);
+
                 var newEv = new EventModel
                 {
                     Title = em.Title,

@@ -193,7 +193,8 @@ namespace Reminder
                     Day = DateTime.Today.Day,
                     Month = month,
                     DayOfWeek = DateTime.Today.DayOfWeek.Convert(),
-                    Title = "Today"
+                    Title = "Today",
+                    Year = DateTime.Today.Year,
                 };
 
                 monthModel.DaysDict.Add(today.Day, today);
