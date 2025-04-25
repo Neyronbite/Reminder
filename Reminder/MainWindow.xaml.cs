@@ -1,16 +1,9 @@
-﻿using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Timers;
+﻿using Notification;
+using NotifyIcon;
+using Reminder.Services;
 using System.ComponentModel;
-using Notifications;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace Reminder
 {
@@ -19,57 +12,25 @@ namespace Reminder
     /// </summary>
     public partial class MainWindow : Window
     {
-        public System.Timers.Timer GlobalTimer { get; set; }
-        public Calendar Calendar { get; set; }
         public NotificationService NotificationService { get; set; }
-
-        private DateTime currentDay;
-
-
+        public NotifyIconService NotifyIconService { get; set; }
+        public CalendarService CalendarService { get; set; }
         public MainWindow()
         {
             InitializeComponent();
 
-            currentDay = DateTime.Now;
+            NotifyIconService = new NotifyIconService(Show, Hide);
+            NotificationService = new NotificationService(NotifyIconService);
+            CalendarService = new CalendarService();
 
-            NotificationService = new NotificationService(Show, Hide);
-
-            InitTimer();
-            Calendar = new Calendar();
-            var initTask = Calendar.Init(CalendarGrid);
+            var initTask = CalendarService.Init(CalendarGrid);
             Task.WaitAll(initTask);
-        }
-
-        private void InitTimer()
-        {
-            GlobalTimer = new System.Timers.Timer();
-            GlobalTimer.AutoReset = true;
-            GlobalTimer.Interval = 5000;
-            GlobalTimer.Elapsed += GlobalTimer_Elapsed;
-            GlobalTimer.Start();
-        }
-
-        private async void GlobalTimer_Elapsed(object? sender, ElapsedEventArgs e)
-        {
-
-            // TODO on day change, update calendar
-            // TODO check todays events
-            await NotificationService.HandelEventNotifications();
         }
 
         void OnClose(object sender, CancelEventArgs args)
         {
-            NotificationService.OnCloseTriggered();
-            args.Cancel = true;
+            NotifyIconService.OnCloseTriggered();
+            //args.Cancel = true;
         }
-
     }
 }
-
-// TODO
-// X button: close program to taskbar icon ++
-// Sqlite db ++
-// Startup program on installation
-// Change program icon ++
-// appconfig.json for local options, like username etc
-// Dark theme

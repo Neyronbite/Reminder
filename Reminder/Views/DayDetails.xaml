@@ -28,7 +28,7 @@
                 <GridView>
                     <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Title}" />
                     <GridViewColumn Header="Time" DisplayMemberBinding="{Binding TriggerTime}" />
-                    <GridViewColumn Header="Enabled" DisplayMemberBinding="{Binding IsEnabled}" />
+                    <GridViewColumn Header="Enabled" DisplayMemberBinding="{Binding Enabled}" />
                 </GridView>
             </ListView.View>
         </ListView>

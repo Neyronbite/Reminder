@@ -1,18 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Reminder.Models
 {
     public class EventModel
     {
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public bool IsEnabled { get; set; }
+        public long Id { get; set; }
+        public long DayId { get; set; }
+        public int DayNum { get; set; }
+        public int Year { get; set; }
+        public int Month { get; set; }
+        public int Hour { get; set; }
+        public int Minute { get; set; }
+        public bool Enabled { get; set; }
         public bool Triggered { get; set; }
-        public bool Canceled { get; set; }
-        public DateTime TriggerTime { get; set; }
+        public string Title { get; set; }
+        public string TriggerTime => new DateTime(Year, Month, DayNum, Hour, Minute, 0).ToString("t");
     }
 }

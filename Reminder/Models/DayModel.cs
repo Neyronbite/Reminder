@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
-using Reminder.Models.Enums;
+﻿using Reminder.Models.Enums;
 
 namespace Reminder.Models
 {
@@ -13,15 +7,13 @@ namespace Reminder.Models
     /// </summary>
     public class DayModel
     {
-        public int Id { get; set; }
-        public int Day { get; set; }
+        public long Id { get; set; }
+        public int DayNum { get; set; }
         public int Month { get; set; }
         public int Year { get; set; }
         public DaysOfWeekEnum DayOfWeek { get; set; }
         public string Title { get; set; }
         public string Notes { get; set; }
-        public List<EventModel> Events { get; set; }
-
-        // Other properties, like textes alarms etc 
+        //public List<EventModel> Events { get; set; }
     }
 }

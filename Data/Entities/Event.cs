@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Data.Entities
+﻿namespace Data.Entities
 {
-    public class Event : BaseEntity
+    public class Event : IEntity
     {
+        public long Id { get; set; }
         public int DayId { get; set; }
-        public string Title { get; set; }
-        public bool IsEnabled { get; set; }
+        public int DayNum { get; set; }
+        public int Year { get; set; }
+        public int Month { get; set; }
+        public int Hour { get; set; }
+        public int Minute { get; set; }
+        public bool Enabled { get; set; }
         public bool Triggered { get; set; }
-        public bool Canceled { get; set; }
-        public DateTime TriggerTime { get; set; }
-
-        public Day Day { get; set; }
+        public string Title { get; set; }
     }
 }

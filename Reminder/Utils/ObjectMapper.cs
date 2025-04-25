@@ -9,82 +9,54 @@ using System.Threading.Tasks;
 namespace Reminder.Utils
 {
     /// <summary>
-    /// Just mapping
+    /// Just mapping TSource to TDestination using reflections
     /// </summary>
-    /// It looks like grdon, but hey, it's simple and does not require any other libs
     public static class ObjectMapper
     {
-        public static DayModel ToModel(this Day day)
+        public static TDestination Map<TSource, TDestination>(this TSource source, Action<TSource, TDestination> customMaps = null) where TDestination : new()
         {
-            var dayModel = new DayModel()
+            var srcType = source.GetType();
+            var srcProps = srcType.GetProperties();
+
+            var tType = typeof(TDestination);
+            var tProps = tType.GetProperties();
+
+            var dest = new TDestination();
+
+            foreach (var tProp in tProps)
             {
-                Id = day.Id,
-                Title = day.Title,
-                Notes = day.Notes,
-                Year = day.Year,
-                Month = day.Month,
-                Day = day.DayNum,
-                DayOfWeek = (Models.Enums.DaysOfWeekEnum)day.DayOfWeek
-            };
+                var srcProp = srcProps
+                    .FirstOrDefault(p => string.Equals(p.Name, tProp.Name, StringComparison.OrdinalIgnoreCase));
 
-            return dayModel;
-        }
+                if (srcProp != null && tProp.CanWrite)
+                {
+                    var value = srcProp.GetValue(source);
 
-        public static Day ToEntity(this DayModel dayModel)
-        {
-            var day = new Day()
+                    if (value != null && tProp.PropertyType.IsAssignableFrom(srcProp.PropertyType))
+                    {
+                        tProp.SetValue(dest, value);
+                    }
+                    else if (value != null)
+                    {
+                        try
+                        {
+                            var converted = Convert.ChangeType(value, tProp.PropertyType);
+                            tProp.SetValue(dest, converted);
+                        }
+                        catch
+                        {
+                            // Could not convert — silently skip or handle
+                        }
+                    }
+                }
+            }
+
+            if (customMaps != null)
             {
-                Id = dayModel.Id,
-                Title = dayModel.Title,
-                Notes = dayModel.Notes,
-                Year = dayModel.Year,
-                Month = dayModel.Month,
-                DayNum = dayModel.Day,
-                DayOfWeek = (int)dayModel.DayOfWeek
-            };
+                customMaps(source, dest);
+            }
 
-            return day;
-        }
-
-        public static EventModel ToModel(this Event @event)
-        {
-            var eventModel = new EventModel()
-            {
-                Id = @event.Id,
-                Title = @event.Title,
-                IsEnabled = @event.IsEnabled,
-                Triggered = @event.Triggered,
-                Canceled = @event.Canceled,
-                TriggerTime = @event.TriggerTime,
-            };
-
-            return eventModel;
-        }
-
-        public static Event ToEntity(this EventModel eventModel, int dayId)
-        {
-            var @event = new Event()
-            {
-                Id = eventModel.Id,
-                DayId = dayId,
-                Title = eventModel.Title,
-                IsEnabled = eventModel.IsEnabled,
-                Triggered = eventModel.Triggered,
-                Canceled = eventModel.Canceled,
-                TriggerTime = eventModel.TriggerTime,
-            };
-
-            return @event;
-        }
-
-        public static List<Event> ToEntity(this List<EventModel> eventModels, int dayId)
-        {
-            return eventModels.Select(e => e.ToEntity(dayId)).ToList();
-        }
-
-        public static List<EventModel> ToModel(this List<Event> events)
-        {
-            return events.Select(e => e.ToModel()).ToList();
+            return dest;
         }
     }
 }

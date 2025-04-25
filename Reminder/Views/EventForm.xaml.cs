@@ -1,17 +1,6 @@
 ﻿using Reminder.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Reminder
 {
@@ -32,9 +21,8 @@ namespace Reminder
         {
             var em = new EventModel();
             em.Title = TitleTextBox.Text;
-            em.TriggerTime = DateTime.Today;
-            //TODO fix this shit
-            em.TriggerTime = (DateTime)TimePicker.SelectedTime;
+            em.Hour = TimePicker.SelectedTime.Value.Hour;
+            em.Minute = TimePicker.SelectedTime.Value.Minute;
 
             callback(em);   
             this.Close();
