@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Forms;
 
 namespace NotifyIcon
 {
@@ -29,6 +30,12 @@ namespace NotifyIcon
             notifyIcon.Icon = new System.Drawing.Icon("icon.ico");
             notifyIcon.Click += new EventHandler(notifyIcon_Click);
             notifyIcon.Visible = true;
+
+            // setting context menu of icon with close btn
+            var menuItem = new MenuItem("Close");
+            menuItem.Click += MenuItem_Click;
+            notifyIcon.ContextMenu = new ContextMenu();
+            notifyIcon.ContextMenu.MenuItems.Add(menuItem);
 
             // Hiding on startup
             Hide();
@@ -64,6 +71,10 @@ namespace NotifyIcon
                 Show();
                 storedWindowState = WindowState.Normal;
             }
+        }
+        private void MenuItem_Click(object sender, EventArgs e)
+        {
+            Environment.Exit(0);
         }
     }
 }

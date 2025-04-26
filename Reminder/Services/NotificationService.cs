@@ -5,11 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Contexts;
 using System.Text;
-using System.Threading;
+using System.Timers;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using Windows.UI.Notifications;
+using Data;
+using Data.Entities;
 
 namespace Notification
 {
@@ -19,129 +21,77 @@ namespace Notification
 
         private System.Media.SoundPlayer player;
         private NotifyIconService notifyIconService;
+
+        private Timer timer;
+        private int intervalSeconds = 3;
+        private int regualrNotificationsPerHour = 60;
         public NotificationService(NotifyIconService notifyIconService)
         {
             //player = new System.Media.SoundPlayer(Environment.CurrentDirectory + "\\notification.wav");
             this.notifyIconService = notifyIconService;
 
-            ShowToast("Testing Toast", "aasdasdasdasdasdasd");
+            // setting timer
+            timer = new Timer();
+            timer.AutoReset = true;
+            timer.Interval = intervalSeconds * 1000;
+            timer.Elapsed += Timer_Elapsed;
+            timer.Start();
         }
 
-        //public async Task HandelEventNotifications()
-        //{
-        //    var db = new Context();
-        //    var events = await GetEventForNow(db);
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            CheckForTrigger();
+        }
 
-        //    if (events != null && events.Count > 0)
-        //    {
-        //        await SendEventNotification(events, db);
-        //    }
-        //    else if (DateTime.Now.Minute == 0 && DateTime.Now.Second > 0 && DateTime.Now.Second < 5)
-        //    {
-        //        var f3 = await GetTodaysFirst3Events(db);
-        //    }
+        private async Task CheckForTrigger()
+        {
+            var today = DateTime.Today;
+            var events = await StaticDb.SqliteQueries.GetEvents(today.Month, today.Year, today.Day);
+            // time bug
+            var toBeTriggered = events.Where(e => e.Triggered != true && e.Enabled == true && (e.Hour < DateTime.Now.Hour || e.Hour == DateTime.Now.Hour && e.Minute <= DateTime.Now.Minute)).ToList();
 
+            if (toBeTriggered != null && toBeTriggered.Count > 0)
+            {
+                SendEventNotifications(toBeTriggered);
+                foreach (var ev in toBeTriggered)
+                {
+                    ev.Triggered = true;
+                    await StaticDb.SqliteQueries.Update(ev);
+                }
+            }
 
-        //    await db.DisposeAsync();
-        //}
+            if (DateTime.Now.Minute % (60 / regualrNotificationsPerHour) == 0 && DateTime.Now.Second > 0 && DateTime.Now.Second <= intervalSeconds)
+            {
+                var next3 = events.Where(e => e.Triggered != true && e.Enabled == true && (e.Hour > DateTime.Now.Hour || e.Hour == DateTime.Now.Hour && e.Minute > DateTime.Now.Minute)).Take(3).ToList();
+                if (next3 != null && next3.Count > 0)
+                {
+                    SendEventNotifications(next3, "For Today");
+                }
+                else
+                {
+                    ShowToast("Nothing planned", "you have nothing else planned today");
+                }
+            }
+        }
 
+        private void SendEventNotifications(List<Event> events, string heading = null)
+        {
+            var sb = new StringBuilder();
+            foreach (var e in events)
+            {
+                sb.Append(e.Title + "\n");
+            }
 
-        //private async Task<List<Event>> GetEventForNow(Context db)
-        //{
-        //    var events = await db.Events
-        //        .Where(e => e.TriggerTime.Day == DateTime.Today.Day && e.TriggerTime.Hour == DateTime.Now.Hour && e.TriggerTime.Minute == DateTime.Now.Minute && e.IsEnabled == true && e.Triggered != true)
-        //        .ToListAsync();
-        //    return events;
-        //}
-        //private async Task<List<Event>> GetTodaysFirst3Events(Context db)
-        //{
-        //    var events = await db.Events
-        //        .Where(e => e.TriggerTime.Day == DateTime.Today.Day && e.IsEnabled == true && e.Triggered != true)
-        //        .Take(3)
-        //        .ToListAsync();
-        //    return events;
-        //}
+            ShowToast(string.IsNullOrWhiteSpace(heading) ? DateTime.Now.ToString("t") : heading, sb.ToString() );
+        }
 
-        //private async Task SendEventNotification(List<Event> evList, Context db)
-        //{
-        //    var sb = new StringBuilder(DateTime.Now.ToString("hh:mm\n"));
-        //    foreach (var e in evList)
-        //    {
-        //        if (e.TriggerTime.Minute == DateTime.Now.Minute)
-        //        {
-        //            sb.Append(e.Title + "\n");
-        //            e.Triggered = true;
-        //        }
-        //    }
-
-        //    await db.SaveChangesAsync();
-
-        //    SendBaloonTipNotication(sb.ToString());
-        //}
-
-        //// TODO There are bugs here
-        //private void SendFirst3Notifications(List<Event> f3, Context db)
-        //{
-        //    if (f3 != null && f3.Count > 0)
-        //    {
-        //        var sb = new StringBuilder("You have work to do today\n");
-        //        foreach (var e in f3)
-        //        {
-        //            sb.Append(e.Title + "\n");
-        //        }
-        //        SendBaloonTipNotication(sb.ToString());
-        //    }
-        //    else
-        //    {
-        //        SendBaloonTipNotication("Heey!!!\n You have no more work for today");
-        //    }
-        //}
-
-        //private void SendProgramLevelNotification(string message)
-        //{
-        //    var notificationManager = new NotificationManager();
-        //    var content = new NotificationContent
-        //    {
-        //        Title = "Remionder",
-        //        Message = message,
-        //        Type = NotificationType.Information,
-        //        //TrimType = NotificationTextTrimType.Attach, // will show attach button on message
-        //        RowsCount = 4, //Will show 3 rows and trim after
-        //        //LeftButtonAction = () => SomeAction(), //Action on left button click, button will not show if it null 
-        //        //RightButtonAction = () => SomeAction(), //Action on right button click,  button will not show if it null
-        //        //LeftButtonContent, // Left button content (string or what u want
-        //        //RightButtonContent, // Right button content (string or what u want
-        //        CloseOnClick = true, // Set true if u want close message when left mouse button click on message (base = true)
-
-        //        Background = new SolidColorBrush(Colors.Black),
-        //        Foreground = new SolidColorBrush(Colors.Aqua),
-
-        //        //Icon = new SvgAwesome()
-        //        //{
-        //        //    Icon = EFontAwesomeIcon.Regular_Star,
-        //        //    Height = 25,
-        //        //    Foreground = new SolidColorBrush(Colors.Yellow)
-        //        //},
-
-        //        //Image = new NotificationImage()
-        //        //{
-        //        //    Source = new BitmapImage(new Uri(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources\\Test image.png")));,
-        //        //    Position = ImagePosition.Top
-        //        //}
-
-        //    };
-        //    notificationManager.Show(content, expirationTime: new TimeSpan(999, 0, 0));
-        //    //player.Play();
-        //}
-
-        
         private void ShowToast(string title, string message)
         {
             try
             {
                 ToastContentBuilder builder = new ToastContentBuilder();
-                builder.AddArgument("title", title);
-                builder.AddText("test");
+                builder.AddArgument("title", "Reminder");
+                builder.AddText(title);
                 builder.AddText(message);
                 builder.AddAppLogoOverride(new Uri(Environment.CurrentDirectory + "\\icon.png"));
                 builder.AddAudio(new Uri(Environment.CurrentDirectory + "\\notification.wav"));

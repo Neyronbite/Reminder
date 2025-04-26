@@ -30,7 +30,7 @@ namespace Reminder
         void OnClose(object sender, CancelEventArgs args)
         {
             NotifyIconService.OnCloseTriggered();
-            //args.Cancel = true;
+            args.Cancel = true;
         }
     }
 }
