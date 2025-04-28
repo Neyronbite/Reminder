@@ -3,6 +3,7 @@ using Data.Entities;
 using Reminder.Models;
 using Reminder.Models.Enums;
 using Reminder.Utils;
+using Reminder.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +40,11 @@ namespace Reminder
             Task.WaitAll(eventsTask);
             var eventEntities = eventsTask.Result;
             events = eventEntities.Select(e => e.Map<Event, EventModel>()).ToList();
-            events.ForEach(e => EventsListView.Items.Add(e));
+            //events.ForEach(e => EventsListView.Items.Add(e));
+            events.ForEach(e => EventsListView.Children.Add(new EventControls(e, (ec) => {
+                events.Remove(e);
+                EventsListView.Children.Remove(ec);
+            })));
         }
 
         private async void Button_Click_Apply(object sender, RoutedEventArgs e)
@@ -74,7 +79,11 @@ namespace Reminder
 
                 //TODO change this later
                 //EventsGrid.Children.Add(new TextBlock() { Text = $"{newEv.Title}: {newEv.TriggerTime}" });
-                EventsListView.Items.Add(em);
+                //EventsListView.Items.Add(em);
+                EventsListView.Children.Add(new EventControls(em, (ec) => {
+                    events.Remove(em);
+                    EventsListView.Children.Remove(ec);
+                }));
             });
             ef.ShowDialog();
         }

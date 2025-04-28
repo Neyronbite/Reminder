@@ -24,7 +24,7 @@ namespace Notification
 
         private Timer timer;
         private int intervalSeconds = 3;
-        private int regualrNotificationsPerHour = 60;
+        private int regualrNotificationsPerHour = 2;
         public NotificationService(NotifyIconService notifyIconService)
         {
             //player = new System.Media.SoundPlayer(Environment.CurrentDirectory + "\\notification.wav");
