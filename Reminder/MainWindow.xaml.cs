@@ -17,14 +17,23 @@ namespace Reminder
         public CalendarService CalendarService { get; set; }
         public MainWindow()
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
 
-            NotifyIconService = new NotifyIconService(Show, Hide);
-            NotificationService = new NotificationService(NotifyIconService);
-            CalendarService = new CalendarService();
+                NotifyIconService = new NotifyIconService(Show, Hide);
+                NotificationService = new NotificationService(NotifyIconService);
+                CalendarService = new CalendarService();
 
-            var initTask = CalendarService.Init(CalendarGrid);
-            Task.WaitAll(initTask);
+                var initTask = CalendarService.Init(CalendarGrid);
+                Task.WaitAll(initTask);
+            }
+            catch (System.Exception e)
+            {
+                MessageBox.Show($"An exception occures\n{e.ToString()}");
+
+                throw;
+            }
         }
 
         void OnClose(object sender, CancelEventArgs args)

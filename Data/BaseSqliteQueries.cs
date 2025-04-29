@@ -98,7 +98,7 @@ namespace Data
             catch (Exception e)
             {
                 // TODO log
-                throw e;
+                throw ;
             }
         }
 
@@ -147,8 +147,8 @@ namespace Data
             }
             catch (Exception e)
             {
-                // TODO log this part
-                throw e;
+                // TODO log
+                throw;
             }
         }
 
@@ -204,7 +204,7 @@ namespace Data
                 catch (Exception e)
                 {
                     //TODO log
-                    throw e;
+                    throw;
                 }
             }, parameters: parameters);
 
@@ -280,7 +280,7 @@ namespace Data
             catch (Exception e)
             {
                 // TODO Log
-                throw e;
+                throw;
             }
         }
 
