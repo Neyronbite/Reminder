@@ -10,17 +10,11 @@
 - 📝 **Day Notes**  
   Add custom notes to any day — use it like a journal or a daily to-do list.
 
-- ⏰ **Timed Events with Notifications**  
-  Add events with specific time (e.g. "2:00 PM") — Reminder will notify you at the exact time, even if it's minimized.
-
-- ✅ **Enable/Disable Events**  
-  Toggle event visibility with a simple checkbox.
+- ⏰ **Timed Events and Alarms with Notifications**  
+  Add events and Alarms with specific time (e.g. "2:00 PM") — Reminder will notify you at the exact time, even if it's minimized.
 
 - 💾 **SQLite Powered Persistence**  
   All your notes and events are saved locally via SQLite. Data is retained between sessions.
-
-- 🚀 **Auto-start on Windows**  
-  Automatically launch Reminder on system boot (requires admin permissions).
 
 - 🧭 **Lightweight and Fast**  
   The app runs in the background without hogging system resources.
@@ -38,7 +32,7 @@ See and manage notes and timed events for any selected day:
 ## Installation
 
 1. Download the latest release from GitHub:  
-   👉 [Reminder v1.1 on GitHub](https://github.com/Neyronbite/Reminder/releases/tag/v1.1)
+   👉 [Reminder v1.2 on GitHub](https://github.com/Neyronbite/Reminder/releases/tag/v1.2)
 
 2. Extract the ZIP file.
 
@@ -49,7 +43,3 @@ See and manage notes and timed events for any selected day:
 - **Platform**: .NET Framework 4.7.2  
 - **UI Framework**: WPF  
 - **Database**: SQLite
-
-## License
-
-This project is free to use and modify. No license yet — use at your own risk.
