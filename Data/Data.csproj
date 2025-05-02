@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseSqliteQueries.cs" />
+    <Compile Include="Entities\Alarm.cs" />
     <Compile Include="Entities\Day.cs" />
     <Compile Include="Entities\Event.cs" />
     <Compile Include="Entities\IEntity.cs" />

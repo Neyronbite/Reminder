@@ -38,5 +38,8 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
         </Grid>
+        <Button HorizontalAlignment="Left" Margin="20,10,0,0" VerticalAlignment="Top" Click="Clock_Click" Padding="0" Width="75" Height="75" Background="White" BorderBrush="White" Style="{x:Null}">
+            <Image Source="/alarm.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+        </Button>
     </Grid>
 </Window>

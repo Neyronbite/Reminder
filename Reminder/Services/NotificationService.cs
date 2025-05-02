@@ -12,6 +12,8 @@ using System.Windows.Media;
 using Windows.UI.Notifications;
 using Data;
 using Data.Entities;
+using Reminder.Utils;
+using Reminder.Models;
 
 namespace Notification
 {
@@ -24,10 +26,9 @@ namespace Notification
 
         private Timer timer;
         private int intervalSeconds = 3;
-        private int regualrNotificationsPerHour = 2;
+        private int regualrNotificationsPerHour = 1;
         public NotificationService(NotifyIconService notifyIconService)
         {
-            //player = new System.Media.SoundPlayer(Environment.CurrentDirectory + "\\notification.wav");
             this.notifyIconService = notifyIconService;
 
             // setting timer
@@ -60,16 +61,34 @@ namespace Notification
                 }
             }
 
-            if (DateTime.Now.Minute % (60 / regualrNotificationsPerHour) == 0 && DateTime.Now.Second > 0 && DateTime.Now.Second <= intervalSeconds)
+            // Minute started
+            if (DateTime.Now.Second > 0 && DateTime.Now.Second <= intervalSeconds)
             {
-                var next3 = events.Where(e => e.Triggered != true && e.Enabled == true && (e.Hour > DateTime.Now.Hour || e.Hour == DateTime.Now.Hour && e.Minute > DateTime.Now.Minute)).Take(3).ToList();
-                if (next3 != null && next3.Count > 0)
+                if (DateTime.Now.Minute % (60 / regualrNotificationsPerHour) == 0)
                 {
-                    SendEventNotifications(next3, "For Today");
+                    var next3 = events.Where(e => e.Triggered != true && e.Enabled == true && (e.Hour > DateTime.Now.Hour || e.Hour == DateTime.Now.Hour && e.Minute > DateTime.Now.Minute)).Take(3).ToList();
+                    if (next3 != null && next3.Count > 0)
+                    {
+                        SendEventNotifications(next3, "For Today");
+                    }
+                    else
+                    {
+                        //ShowToast("Nothing planned", "you have nothing else planned today");
+                    }
                 }
-                else
+
+                var todayDow = DateTime.Now.DayOfWeek.Convert();
+                var alarmEntities = await StaticDb.SqliteQueries.GetAllAlarms();
+                var alarms = alarmEntities.Select(e => e.Map<Alarm, AlarmModel>().Init())
+                    .Where(e => e.Enabled == true && e.Hour == DateTime.Now.Hour && e.Minute == DateTime.Now.Minute && e.DaysOfWeekBits[(int)todayDow])
+                    .ToList();
+
+                if (alarms != null && alarms.Count > 0)
                 {
-                    ShowToast("Nothing planned", "you have nothing else planned today");
+                    foreach (var item in alarms)
+                    {
+                        ShowToast("Alarm", item.Title);
+                    }
                 }
             }
         }
@@ -98,7 +117,6 @@ namespace Notification
                 builder.AddButton("Dismiss", new ToastActivationType(), "dismiss");
 
                 builder.Show();
-                //player.Play();
 
                 if (notifyIconService.StoredWindowState == WindowState.Minimized)
                 {

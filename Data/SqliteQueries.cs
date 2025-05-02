@@ -27,6 +27,17 @@ namespace Data
         }
 
         /// <summary>
+        /// Gets all alarms
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<Alarm>> GetAllAlarms()
+        {
+            var query = @"SELECT * FROM alarms";
+            var result = await Get<Alarm>(query);
+            return result;
+        }
+
+        /// <summary>
         /// Gets events by specified day params
         /// </summary>
         /// <param name="month"></param>
@@ -91,7 +102,6 @@ namespace Data
                 day_num INTEGER NOT NULL,
                 year INTEGER NOT NULL,
                 month INTEGER NOT NULL,
-                day_of_week INTEGER NOT NULL,
                 title TEXT,
                 notes TEXT
             );
@@ -110,8 +120,30 @@ namespace Data
                 CONSTRAINT fk_days
                 FOREIGN KEY (day_id)
                 REFERENCES days(day_id)
+            );
+
+            CREATE TABLE IF NOT EXISTS alarms (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                days_of_week INTEGER NOT NULL,
+                hour INTEGER NOT NULL,
+                minute INTEGER NOT NULL,
+                enabled INTEGER NOT NULL,
+                title TEXT NOT NULL
             );";
+
             await Execute(sqlScript);
+
+            // Trying to update existing database where this column does not exist
+            sqlScript = "ALTER TABLE days ADD COLUMN color TEXT;";
+
+            try
+            {
+                await Execute(sqlScript);
+            }
+            catch (System.Exception)
+            {
+
+            }
         }
     }
 }

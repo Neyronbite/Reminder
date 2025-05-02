@@ -62,6 +62,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\AlarmModel.cs" />
     <Compile Include="Models\DayModel.cs" />
     <Compile Include="Models\Enums\DaysOfWeekEnum.cs" />
     <Compile Include="Models\Enums\MonthsEnum.cs" />
@@ -73,6 +74,12 @@
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Utils\DayOFWeekUtil.cs" />
     <Compile Include="Utils\ObjectMapper.cs" />
+    <Compile Include="Views\AlarmControls.xaml.cs">
+      <DependentUpon>AlarmControls.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AlarmsWindow.xaml.cs">
+      <DependentUpon>AlarmsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DayDetails.xaml.cs">
       <DependentUpon>DayDetails.xaml</DependentUpon>
     </Compile>
@@ -98,6 +105,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </None>
+    <Page Include="Views\AlarmControls.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AlarmsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\DayDetails.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -148,6 +163,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="alarm.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="icon-red.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

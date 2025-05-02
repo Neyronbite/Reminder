@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace Reminder.Services
 {
@@ -66,10 +67,7 @@ namespace Reminder.Services
                 // If we have something on that day in our month model, we are marking it as special
                 if (monthModel.DaysDict.TryGetValue(i, out DayModel cdm))
                 {
-                    //TODO add whole attributes, text, alarm info etc to button click
-                    //TODO add button click handler that opens new window with all info about that day
-                    //btn.Background = Brushes.IndianRed;
-                    btn = new CalendarButton($"{i}\n{cdm.Title}", col, row, true);
+                    btn = new CalendarButton($"{i}\n{cdm.Title}", col, row, true, backColor: cdm.GetColor());
                 }
                 // Eles, just common button
                 else
@@ -238,7 +236,12 @@ namespace Reminder.Services
                         monthModel.DaysDict.Add(day, cdm);
                     }
                     currentBtn.Content = $"{day}\n{cdm.Title}";
-                    currentBtn.Background = CalendarButton.SpecialBackgroundBrush;
+
+                    // Setting background colors
+                    currentBtn.BackColor = cdm.GetColor();
+                    currentBtn.Background = cdm.GetColor() != null ? 
+                        new SolidColorBrush((System.Windows.Media.Color)cdm.GetColor()) : 
+                        CalendarButton.SpecialBackgroundBrush;
                 });
             wnd.ShowDialog();
         }

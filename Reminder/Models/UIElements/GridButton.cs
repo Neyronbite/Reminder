@@ -7,7 +7,7 @@ namespace Reminder.Models.UIElements
     {
         public static Brush DefaultBackgroundBrush => Brushes.Transparent;
 
-        public GridButton(string content, int colGrid, int rowGrid, int fontSize = 24)
+        public GridButton(string content, int colGrid, int rowGrid, int fontSize = 24, Brush backgroundBrush = null)
         {
             Content = content;
             VerticalContentAlignment = System.Windows.VerticalAlignment.Top;

@@ -1,6 +1,8 @@
 ﻿using Notification;
 using NotifyIcon;
 using Reminder.Services;
+using Reminder.Views;
+using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
@@ -40,6 +42,12 @@ namespace Reminder
         {
             NotifyIconService.OnCloseTriggered();
             args.Cancel = true;
+        }
+
+        private void Clock_Click(object sender, RoutedEventArgs e)
+        {
+            var alarmsWindow = new AlarmsWindow();
+            alarmsWindow.ShowDialog();
         }
     }
 }
